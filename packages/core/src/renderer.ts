@@ -8,6 +8,7 @@ function renderLatex(latex: string, displayMode = false): string {
   try {
     return katex.renderToString(latex, {
       displayMode,
+      fleqn: true,
       throwOnError: false,
       trust: true,
       strict: false,
@@ -165,8 +166,13 @@ export const defaultStyles = `
   text-align: left !important;
 }
 
+.calc-line .katex-display > .katex {
+  text-align: left !important;
+}
+
 .calc-line .katex {
   font-size: 1.1em;
+  text-align: left;
 }
 
 .calc-error {
