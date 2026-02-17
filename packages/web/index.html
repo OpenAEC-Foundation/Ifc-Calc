@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ifc-Calc</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background: #f0f2f5;
+    }
+
+    .app-header {
+      height: 48px;
+      background: #1e293b;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      padding: 0 1.2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .app-header span {
+      color: #60a5fa;
+      margin-right: 0.5rem;
+    }
+
+    .split-pane {
+      display: flex;
+      height: calc(100vh - 48px);
+    }
+
+    .editor-pane {
+      width: 50%;
+      border-right: 2px solid #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      background: #1e1e2e;
+    }
+
+    .pane-label {
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      background: #0f172a;
+      font-weight: 600;
+    }
+
+    .editor-pane .pane-label { background: #11111b; color: #6c7086; }
+
+    #editor {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .preview-pane {
+      width: 50%;
+      overflow: auto;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #preview {
+      flex: 1;
+      overflow: auto;
+      padding: 1rem;
+    }
+
+    /* CodeMirror overrides */
+    .cm-editor { height: 100%; }
+    .cm-scroller { overflow: auto; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <span>▦</span> Ifc-Calc
+  </div>
+  <div class="split-pane">
+    <div class="editor-pane">
+      <div class="pane-label">Editor</div>
+      <div id="editor"></div>
+    </div>
+    <div class="preview-pane">
+      <div class="pane-label">Preview</div>
+      <div id="preview"></div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

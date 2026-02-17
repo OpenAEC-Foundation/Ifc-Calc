@@ -1,0 +1,8 @@
+{
+  "name": "ifc-calc-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/core",
+    "packages/web"
+  ]
+}
