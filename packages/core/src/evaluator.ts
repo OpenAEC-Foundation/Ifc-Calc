@@ -7,12 +7,16 @@ export interface Scope {
   [key: string]: unknown;
 }
 
-export function evaluate(nodes: AstNode[]): EvaluatedNode[] {
-  const scope: Scope = {};
-  return evaluateNodes(nodes, scope);
+export interface SelectValues {
+  [key: string]: string;
 }
 
-function evaluateNodes(nodes: AstNode[], scope: Scope): EvaluatedNode[] {
+export function evaluate(nodes: AstNode[], selectValues?: SelectValues): EvaluatedNode[] {
+  const scope: Scope = {};
+  return evaluateNodes(nodes, scope, selectValues || {});
+}
+
+function evaluateNodes(nodes: AstNode[], scope: Scope, selectValues: SelectValues): EvaluatedNode[] {
   const result: EvaluatedNode[] = [];
 
   for (const node of nodes) {
@@ -32,7 +36,7 @@ function evaluateNodes(nodes: AstNode[], scope: Scope): EvaluatedNode[] {
       }
 
       case 'conditional': {
-        const condResult = evaluateConditional(node, scope);
+        const condResult = evaluateConditional(node, scope, selectValues);
         if (condResult) {
           result.push(condResult);
         }
@@ -48,6 +52,28 @@ function evaluateNodes(nodes: AstNode[], scope: Scope): EvaluatedNode[] {
       case 'image':
         result.push({ type: 'image', src: node.src });
         break;
+
+      case 'gef-upload':
+        result.push({ type: 'gef-upload', name: node.name, data: null });
+        break;
+
+      case 'select': {
+        const selectedValue = selectValues[node.name] ?? node.options[0]?.value ?? '0';
+        // Set the variable in scope so subsequent formulas can use it
+        try {
+          scope[node.name] = math.evaluate(selectedValue, {});
+        } catch {
+          scope[node.name] = parseFloat(selectedValue) || 0;
+        }
+        result.push({
+          type: 'select',
+          name: node.name,
+          label: node.label,
+          options: node.options,
+          selectedValue,
+        });
+        break;
+      }
     }
   }
 
@@ -276,7 +302,8 @@ function formatInline(value: unknown): string {
 
 function evaluateConditional(
   node: { condition: string; ifBody: AstNode[]; elseBody: AstNode[] },
-  scope: Scope
+  scope: Scope,
+  selectValues: SelectValues
 ): EvaluatedNode | null {
   try {
     const condValue = math.evaluate(node.condition, scope);
@@ -285,7 +312,7 @@ function evaluateConditional(
 
     if (body.length === 0) return null;
 
-    const children = evaluateNodes(body, scope);
+    const children = evaluateNodes(body, scope, selectValues);
     return { type: 'conditional-branch', children };
   } catch {
     return {

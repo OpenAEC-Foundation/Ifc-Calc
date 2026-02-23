@@ -35,6 +35,12 @@ const calcLanguage = StreamLanguage.define({
       return 'keyword';
     }
 
+    // Select start
+    if (stream.sol() && stream.match(/^@select\s+/)) {
+      stream.skipToEnd();
+      return 'keyword';
+    }
+
     // Image
     if (stream.sol() && stream.match(/^@img\(.+\)\s*$/)) {
       return 'keyword';

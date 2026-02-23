@@ -58,7 +58,49 @@ function renderNode(node: EvaluatedNode): string {
 
     case 'image':
       return `<div class="calc-image"><img src="${escapeHtml(node.src)}" alt="" /></div>`;
+
+    case 'select':
+      return renderSelect(node);
+
+    case 'gef-upload':
+      return renderGefUpload(node);
   }
+}
+
+function renderSelect(node: {
+  name: string;
+  label: string;
+  options: { text: string; value: string }[];
+  selectedValue: string;
+}): string {
+  const optionsHtml = node.options
+    .map(opt => {
+      const selected = opt.value === node.selectedValue ? ' selected' : '';
+      return `<option value="${escapeHtml(opt.value)}"${selected}>${escapeHtml(opt.text)}</option>`;
+    })
+    .join('\n');
+
+  return `<div class="calc-select">
+  <label class="calc-select-label">${escapeHtml(node.label)}</label>
+  <select class="calc-select-input" data-var="${escapeHtml(node.name)}">
+    ${optionsHtml}
+  </select>
+</div>`;
+}
+
+function renderGefUpload(node: { name: string }): string {
+  return `<div class="calc-gef-upload" data-gef-var="${escapeHtml(node.name)}">
+  <div class="calc-gef-dropzone" id="gef-drop-${escapeHtml(node.name)}">
+    <span class="calc-gef-icon">&#x1F4CA;</span>
+    <span class="calc-gef-text">GEF-bestand slepen of klikken om te uploaden</span>
+    <input type="file" accept=".gef,.GEF" class="calc-gef-input" />
+  </div>
+  <div class="calc-gef-result" style="display:none">
+    <div class="calc-gef-filename"></div>
+    <div class="calc-gef-chart"></div>
+    <div class="calc-gef-values"></div>
+  </div>
+</div>`;
 }
 
 function renderAssignment(node: {
@@ -209,5 +251,122 @@ export const defaultStyles = `
   max-width: 100%;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
+}
+
+.calc-select {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 0.4em 0;
+  padding: 0.5em 1em;
+  background: #f0f9ff;
+  border-left: 3px solid #0ea5e9;
+  border-radius: 0 6px 6px 0;
+}
+
+.calc-select-label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #0369a1;
+  white-space: nowrap;
+}
+
+.calc-select-input {
+  padding: 0.35em 0.75em;
+  border: 1px solid #bae6fd;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.9em;
+  color: #1a1a1a;
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.calc-select-input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+}
+
+/* ─── GEF Upload ─────────────────────────────────────────────────── */
+
+.calc-gef-upload {
+  margin: 0.75em 0;
+}
+
+.calc-gef-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 1.5em 1em;
+  border: 2px dashed #94a3b8;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.calc-gef-dropzone:hover,
+.calc-gef-dropzone.drag-over {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.calc-gef-icon {
+  font-size: 2em;
+  line-height: 1;
+}
+
+.calc-gef-text {
+  font-size: 0.9em;
+  color: #64748b;
+}
+
+.calc-gef-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.calc-gef-result {
+  margin-top: 0.75em;
+}
+
+.calc-gef-filename {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: #0369a1;
+  margin-bottom: 0.5em;
+  padding: 0.3em 0.6em;
+  background: #f0f9ff;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.calc-gef-chart {
+  margin: 0.5em 0;
+  overflow-x: auto;
+}
+
+.calc-gef-chart svg {
+  display: block;
+}
+
+.calc-gef-values {
+  font-size: 0.9em;
+  color: #374151;
+  padding: 0.5em 0.75em;
+  background: #f0fdf4;
+  border-left: 3px solid #22c55e;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.8;
+}
+
+.calc-gef-values strong {
+  color: #166534;
 }
 `;

@@ -33,13 +33,32 @@ export interface ImageNode {
   src: string;
 }
 
+export interface SelectOption {
+  text: string;
+  value: string;
+}
+
+export interface SelectNode {
+  type: 'select';
+  name: string;
+  label: string;
+  options: SelectOption[];
+}
+
+export interface GefUploadNode {
+  type: 'gef-upload';
+  name: string;  // variable prefix, e.g. "sondering1"
+}
+
 export type AstNode =
   | HeadingNode
   | TextNode
   | AssignmentNode
   | ConditionalNode
   | SvgNode
-  | ImageNode;
+  | ImageNode
+  | SelectNode
+  | GefUploadNode;
 
 export interface EvaluatedHeading {
   type: 'heading';
@@ -76,10 +95,26 @@ export interface EvaluatedImage {
   src: string;
 }
 
+export interface EvaluatedSelect {
+  type: 'select';
+  name: string;
+  label: string;
+  options: SelectOption[];
+  selectedValue: string;
+}
+
+export interface EvaluatedGefUpload {
+  type: 'gef-upload';
+  name: string;
+  data: null;  // data comes from runtime upload
+}
+
 export type EvaluatedNode =
   | EvaluatedHeading
   | EvaluatedText
   | EvaluatedAssignment
   | EvaluatedConditionalBranch
   | EvaluatedSvg
-  | EvaluatedImage;
+  | EvaluatedImage
+  | EvaluatedSelect
+  | EvaluatedGefUpload;

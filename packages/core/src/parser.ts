@@ -7,6 +7,9 @@ const HEADING_RE = /^(#{1,6})\s+(.+)$/;
 const SVG_START_RE = /^@svg\s*$/;
 const SVG_END_RE = /^@end\s*$/;
 const IMG_RE = /^@img\((.+)\)\s*$/;
+const SELECT_START_RE = /^@select\s+([a-zA-Z_]\w*)\s+"([^"]+)"\s*$/;
+const SELECT_OPTION_RE = /^(.+?)\s*=\s*(.+)$/;
+const GEF_RE = /^@gef\s+([a-zA-Z_]\w*)\s*$/;
 const IF_RE = /^#if\s+(.+)$/;
 const ELSE_RE = /^#else\s*$/;
 const ENDIF_RE = /^#end\s+if\s*$/;
@@ -60,10 +63,40 @@ function parseLines(lines: string[], start: number, end: number): ParseResult {
       continue;
     }
 
+    // Select block
+    const selectMatch = trimmed.match(SELECT_START_RE);
+    if (selectMatch) {
+      const name = selectMatch[1];
+      const label = selectMatch[2];
+      const options: { text: string; value: string }[] = [];
+      i++;
+      while (i < end && !SVG_END_RE.test(lines[i].trim())) {
+        const optLine = lines[i].trim();
+        if (optLine !== '') {
+          const optMatch = optLine.match(SELECT_OPTION_RE);
+          if (optMatch) {
+            options.push({ text: optMatch[1].trim(), value: optMatch[2].trim() });
+          }
+        }
+        i++;
+      }
+      nodes.push({ type: 'select', name, label, options });
+      i++; // skip @end
+      continue;
+    }
+
     // Image
     const imgMatch = trimmed.match(IMG_RE);
     if (imgMatch) {
       nodes.push({ type: 'image', src: imgMatch[1].trim() });
+      i++;
+      continue;
+    }
+
+    // GEF upload
+    const gefMatch = trimmed.match(GEF_RE);
+    if (gefMatch) {
+      nodes.push({ type: 'gef-upload', name: gefMatch[1] });
       i++;
       continue;
     }
