@@ -127,6 +127,7 @@ const SHEET_PRESETS: Array<{
   { type: "calc", templateId: "houten-balklaag", label: "Houten balklaag", icon: "▤" },
   { type: "calc", templateId: "houten-kolom", label: "Houten kolom (knik)", icon: "║" },
   { type: "calc", templateId: "oplegging-metselwerk", label: "Oplegging op metselwerk", icon: "⊥" },
+  { type: "calc", templateId: "permanente-vuurlast", label: "Permanente vuurlast", icon: "🔥" },
   { type: "calc", templateId: "paaldraagvermogen", label: "Paaldraagvermogen", icon: "⫯" },
   { type: "calc", templateId: "stalen-ligger", label: "Stalen ligger", icon: "─" },
   { type: "wizard", templateId: "wizard:spuwer", label: "Spuwer (wizard)", icon: "💧" },
