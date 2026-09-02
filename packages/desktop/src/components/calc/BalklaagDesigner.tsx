@@ -238,7 +238,7 @@ export default function BalklaagDesigner() {
           <label>Eigengewicht
             <select value={eig} onChange={(e) => setVal("eigengewicht", parseInt(e.target.value))}>
               <option value={0}>EN 338</option>
-              <option value={550}>XConstruct</option>
+              <option value={550}>Referentie</option>
             </select>
           </label>
 

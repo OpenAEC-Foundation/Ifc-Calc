@@ -1,13 +1,13 @@
 /**
  * Balklaag — houten vloerbalken volgens NEN-EN 1995-1-1+C1+A1:2011/NB:2013.
  *
- * Reproduceert de XConstruct-uitwerking: 3 belastingsgevallen (permanent UDL,
+ * Reproduceert de referentie-uitwerking: 3 belastingsgevallen (permanent UDL,
  * veranderlijk UDL, geconcentreerde last met concentratiefactor k_r),
  * BGT-doorbuiging (w_fin met kruip k_def) en UGT (buiging §6.1.6 + afschuiving
  * §6.1.7).
  *
  * Eigengewicht balk: A · ρ_mean · g volgens EN 1991-1-1 / EN 338 (ρ_mean per
- * sterkteklasse). XConstruct rekent dit ~5,5 kN/m³ (te hoog voor C24); hier de
+ * sterkteklasse). De referentie-uitwerking rekent dit ~5,5 kN/m³ (te hoog voor C24); hier de
  * correcte ρ_mean (C24 = 420 kg/m³ ≈ 4,12 kN/m³).
  */
 
@@ -64,7 +64,7 @@ export const balklaag = `"Balklaag — houten vloerbalken volgens EN 1995-1-1
 
 @select eigengewicht "Eigengewicht-dichtheid balk"
   EN 338 (ρ_mean, normconform) = 0
-  XConstruct (550 kg/m³) = 550
+  Referentie (550 kg/m³) = 550
 @end
 
 @select gevolgklasse "Gevolgklasse (CC)"
@@ -198,7 +198,7 @@ u_q,k
 
 #hide
 a_ref = 1000 mm
-C_kr = 85700 mm^3', kalibratie XConstruct — derde term = t_vloer³/C_kr (onafh. van I_y)'
+C_kr = 85700 mm^3', kalibratie referentie-uitwerking — derde term = t_vloer³/C_kr (onafh. van I_y)'
 #show
 k_r = 0.37 + 0.8*hoh/a_ref - t_vloer^3/C_kr', concentratiefactor (NEN-EN 1995-1-1 NB)'
 k_r
@@ -321,12 +321,12 @@ UC_max = max(UC_doorbuiging; UC_buiging; UC_afsch)
 '<hr/>
 '<i>Aandachtspunten / vereenvoudigingen:
 '<ul>
-'<li>Eigengewicht balk met EN 338 ρ<sub>mean</sub> (C24 = 420 kg/m³). XConstruct
+'<li>Eigengewicht balk met EN 338 ρ<sub>mean</sub> (C24 = 420 kg/m³). De referentie-uitwerking
 'hanteert ~5,5 kN/m³ (hoger); resultaten hier daardoor iets gunstiger.</li>
-'<li>Concentratiefactor k<sub>r</sub> met kalibratieconstante uit de XConstruct-
+'<li>Concentratiefactor k<sub>r</sub> met kalibratieconstante uit de referentie-
 'voorbeelden; nog te verifiëren met een referentiecase.</li>
 '<li>Afschuiving met volle balkbreedte b (geen k<sub>cr</sub>-reductie), conform
-'de XConstruct-uitwerking.</li>
+'de referentie-uitwerking.</li>
 '<li>Trillingstoets (§7.3) en kip zijn niet opgenomen (vloerbalk zijdelings
 'gesteund door het vloerhout).</li>
 '</ul></i>
