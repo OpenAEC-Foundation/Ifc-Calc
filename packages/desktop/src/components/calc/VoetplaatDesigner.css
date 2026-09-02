@@ -112,7 +112,7 @@
 }
 .vd-ctrl-h:first-child { margin-top: 0; }
 
-/* compacte invoer — label links, smal veld rechts (XConstruct-look) */
+/* compacte invoer — label links, smal veld rechts (referentie-look) */
 .vd-compact { width: 258px; gap: 3px; }
 .vd-compact label {
   flex-direction: row;
